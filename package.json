@@ -10,6 +10,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "libp2p": "^0.14.3"
+    "commander": "^2.12.2",
+    "libp2p": "^0.14.3",
+    "libp2p-floodsub": "^0.13.1",
+    "libp2p-kad-dht": "^0.6.0",
+    "libp2p-mdns": "^0.9.1",
+    "libp2p-railing": "^0.7.1",
+    "libp2p-secio": "^0.8.1",
+    "libp2p-spdy": "^0.11.0",
+    "libp2p-tcp": "^0.11.1",
+    "node-storage": "0.0.7",
+    "peer-id": "^0.10.3",
+    "sync": "^0.2.5"
   }
 }
