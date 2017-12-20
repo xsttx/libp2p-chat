@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bin" : {
+    "snipped" : "./index.js"
+  },
   "dependencies": {
     "async": "^2.6.0",
     "commander": "^2.12.2",
