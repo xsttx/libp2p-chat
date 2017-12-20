@@ -113,7 +113,7 @@ program
                 peerInfo.multiaddrs.add('/ip4/0.0.0.0/tcp/0');
 
                 const me = new LibP2PBundle(peerInfo);
-                
+
                 me.start(function (err) {
 
                     if(err){
@@ -124,36 +124,71 @@ program
                         me.dial(peer, () => {});
                     });
 
-                    me.peerRouting.findPeer(f, (err, peerInfo) => {
+                    me.on('peer:connect', (peer) => {
 
-                        if(err){
-                            throw err;
+                        if(peer.id.toB58String() === f){
+                            console.log("Connected to friend");
                         }
-
-                        me.dial(peerInfo, () => {
-                            console.log("Found friend");
-                        })
 
                     });
 
-                    const fsub = new FloodSub(me);
+                    const fSub = new FloodSub(me);
 
-                    fsub.start((err) => {
+                    fSub.start((err) => {
 
                         if (err) {
                             throw err;
                         }
 
-                        fsub.on(myTopic, (data) => {
+                        fSub.on(myTopic, (data) => {
                             console.log(`From ${friend}: ${data.data.toString()}`);
                         });
 
-                        fsub.subscribe(myTopic);
+                        fSub.subscribe(myTopic);
 
                         process.stdin.on('data', function (text) {
                             console.log(`Me: ${text}`);
-                            fsub.publish(friendTopic, text);
+                            fSub.publ
+                            ish(friendTopic, text);
                         });
+
+                    });
+
+                    //Friend
+                    PeerId.createFromJSON({id: f}, (err, peerId) => {
+
+                        PeerInfo.create(peerId, (err, peerInfo) => {
+
+                            const i = setInterval(function () {
+
+                                if(me.isConnected()){
+
+                                    me.peerRouting.findPeer(peerInfo.id, (error, peer) => {
+
+                                        if(error){
+                                            throw error;
+                                        }
+
+                                        //@Todo why is connection 0
+                                        me.dial(peer, (err, connection) => {
+
+                                            if(err){
+                                                throw new Error();
+                                            }
+
+                                        })
+
+                                    });
+
+                                    clearInterval(i);
+
+                                }
+
+
+                            }, 1000);
+
+
+                        })
 
                     })
 

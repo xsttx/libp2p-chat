@@ -5,6 +5,7 @@ const KadDHT = require('libp2p-kad-dht');
 const spdy = require('libp2p-spdy');
 const secio = require('libp2p-secio');
 const Railing = require('libp2p-railing');
+const Multiplex = require('libp2p-multiplex');
 
 const bootstrapers = [
     '/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
@@ -28,21 +29,25 @@ class LibP2PBundle extends LibP2P {
             ],
             connection: {
                 muxer: [
-                    spdy
+                    spdy,
+                    Multiplex
                 ],
                 crypto: [
                     secio
                 ]
             },
             discovery: [
-                new MulticastDNS(peerInfo, {interval: 1000}),
-                new Railing(bootstrapers)
+                new Railing(bootstrapers, {interval: 1000})
             ],
             // DHT is passed as its own enabling PeerRouting, ContentRouting and DHT itself components
             DHT: KadDHT
         };
 
         super(modules, peerInfo)
+    }
+
+    isConnected(){
+        return Object.keys(this.peerBook.getAll()).length !== 0;
     }
 
 }
