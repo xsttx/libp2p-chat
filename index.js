@@ -149,7 +149,7 @@ program
                         process.stdin.on('data', function (text) {
                             console.log(`Me: ${text}`);
                             fSub.publ
-                            ish(friendTopic, text);
+                            fSub.publish(friendTopic, text);
                         });
 
                     });
