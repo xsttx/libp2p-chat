@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "bin" : {
-    "snipped" : "./index.js"
+    "snippet" : "./index.js"
   },
   "dependencies": {
     "async": "^2.6.0",
